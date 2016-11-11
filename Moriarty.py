@@ -3,16 +3,21 @@
 import src.Data as Data
 import src.Functions as Functions
 
-grid = [{(x,y) : ' * ' } for y in range(8) for x in range(8)]
-
 print("Bienvenue dans ce jeu de Moriarty !")
 
-activator, inhibitor = Functions.player_definition()
+grid = Functions.create_initial_grid()
+
+Functions.create_player()
 
 print('\nFor this game :'
 
-	'\n[+]', activator, 'is the '+Functions.colors.RED+'Activator'+Functions.colors.STOP+
+	'\n 	[+]', Functions.colors.GREEN + Data.current_player['Activator'] + Functions.colors.STOP, 'is the '+Functions.colors.GREEN+'Activator'+Functions.colors.STOP+
 	
-	'\n[+]', inhibitor, 'is the '+Functions.colors.GREEN+'Inhibitor\n'+Functions.colors.STOP)
+	'\n 	[+]', Functions.colors.RED + Data.current_player['Inhibitor'] + Functions.colors.STOP, 'is the '+Functions.colors.RED+'Inhibitor\n'+Functions.colors.STOP)
+
+
+Functions.display_grid(grid)
+
+grid = Functions.playing(Data.current_player['Activator'], grid)
 
 Functions.display_grid(grid)
