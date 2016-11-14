@@ -64,6 +64,7 @@ def create_player():
 	print("\nEntrez le pseudo du joueur", colors.RED + "'Inhibitor' : "+colors.STOP, end = "")
 	inhibitor = input()
 
+	# Default usernames if not defined by users
 	if len(activator) == 0:
 		activator = 'Activator'
 
@@ -122,36 +123,30 @@ def check_changes(coordXY, case, no_case, grid):
 	#	récupérer toutes les modifications possibles par le positionnement et les appliquer (pas le cas en ce moment)
 	#	problème -> change état de tous les pions définis alentour et non pas uniquemet les bons. 
 
-	testing_coord, surrounding_coord = generate_allowed_positions(coordXY, grid)
+	testing_coord, surrounding_coord = get_allowed_positions(coordXY, grid)
 
-	print('SC', len(surrounding_coord), surrounding_coord)
-	print('TC', len(testing_coord), testing_coord)
 	status = False
 	taken_cases = []
 
-
+	# Check if the position given modifies one spot at list
 	for i in range(len(testing_coord)):
-		#print(testing_coord[i], surrounding_coord[i])
 		try:
-
 			if grid[testing_coord[i]] == case and grid[surrounding_coord[i]] == no_case:
-				print(testing_coord[i], surrounding_coord[i])
 				taken_cases.append(surrounding_coord[i])
 				status = True
 
 		except KeyError:
 			pass
-				
-	print('taken', taken_cases)
 
+	# Modify the colors of the taken spots
 	for elem in taken_cases:
 		for key in grid.keys():
 			grid[elem] = case
 
-	return grid, status
+	return grid, status, taken_cases
 
 
-def generate_allowed_positions(coordXY, grid):
+def get_allowed_positions(coordXY, grid):
 	"""Allowed positions
 
 	Calculate the coordonates allowed for modifications
@@ -162,10 +157,11 @@ def generate_allowed_positions(coordXY, grid):
 	Return :
 		testing_coord : coordinates to test
 		surrounging_coord : nearby coordinates of the coordXY spot"""
+
 	surrounding_coord = []
 	testing_coord = []
-	allowed_position = []
 
+	# Get the coordinates of the external square
 	for i in range(coordXY[0] - 1, coordXY[0] + 2, 2):
 		for j in range(coordXY[1] - 1, coordXY[1] +2, 1):
 			if (i,j) == coordXY:
@@ -175,8 +171,7 @@ def generate_allowed_positions(coordXY, grid):
 			else:
 				surrounding_coord.append((i,j))
 
-			
-
+	# Get the coordinates of the internal square
 	for i in range(coordXY[0] - 2, coordXY[0] + 3, 4):
 		for j in range(coordXY[1] - 2, coordXY[1] + 3, 2):
 			if i < 0 or j < 0 or i > 7 or j > 7:
@@ -184,6 +179,7 @@ def generate_allowed_positions(coordXY, grid):
 			else:
 				testing_coord.append((i,j))
 
+	# Get the position of Bottom and Top of the 2 squares
 	TC = [(coordXY[0], coordXY[1] + 2), (coordXY[0], coordXY[1] - 2)]
 	for elem in TC:
 
@@ -220,7 +216,6 @@ def check_position(c_player, case, no_case, grid):
 
 	# Player coordinates choice
 	while not status:
-		#os.system('clear')
 
 		try:
 			print('\n' + c_player, 'a vous de jouer donnez la coordonnée de X : ', end = '')
@@ -237,7 +232,7 @@ def check_position(c_player, case, no_case, grid):
 				print('E2')
 				raise ValueError
 
-			grid, tmp = check_changes((coordX,coordY), case, no_case, grid)
+			grid, tmp, taken_cases = check_changes((coordX,coordY), case, no_case, grid)
 			
 			if tmp == False:
 				print('E3')
@@ -257,7 +252,7 @@ def check_position(c_player, case, no_case, grid):
  	[+] Coordonnées ne doivent pas être celles d'une case déjà modifiée
 				""")
 
-	return ((coordX,coordY), grid)
+	return ((coordX,coordY), grid, taken_cases)
 
 
 def playing(player, grid):
@@ -270,9 +265,7 @@ def playing(player, grid):
 	Return :
 		grid : the updated grid"""
 
-	#TODO : Gestion des erreurs sur les coordonnées et sur les cases accessibles
-
-	# Determine the current player and define the colors to use to fill the case of the grid he chose
+	# Determine the current player and define the colors to use to fill the spots of the grid he chose
 	if player == Data.current_player['Activator']:
 		case = colors.GREENB + '   ' + colors.STOP
 		no_case = colors.REDB + '   ' + colors.STOP
@@ -285,11 +278,12 @@ def playing(player, grid):
 		c_player = colors.RED + player + colors.STOP
 		print('Joueur actuel : ' + colors.RED + player + colors.STOP)
 
-	coordXY, grid = check_position(c_player, case, no_case, grid)
+	coordXY, grid, taken_cases = check_position(c_player, case, no_case, grid)
 
 	# Modifies grid with the informations given by the player
-	for key in grid.keys():
-		if key == coordXY:
-			grid[key] = case
+	grid[coordXY] = case
+
+	for elem in taken_cases:
+		grid[elem] = case
 
 	return grid
