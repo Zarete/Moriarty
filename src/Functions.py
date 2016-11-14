@@ -7,21 +7,17 @@ import os
 class colors:
 	
 	HEADER = '\033[95m'
-
-	GREENB = '\033[42m'
-	GREEN = '\033[92m'
-
-	REDB = '\033[41m'
-	RED = '\033[91m'
-
 	STOP = '\033[0m'
 	BOLD = '\033[1m'
 
+	GREEN = BOLD + '\033[92m'
+
+	RED = BOLD + '\033[91m'
+
 
 def create_initial_grid():
-	"""Create the grid
-
-	Create a grid of 8 x 8 with the corresponding coordinates
+	"""Create the gri[R]
+[V]	Create a grid of 8 x 8 with the corresponding coordinates
 	contained into a tuple (x, y), the grid starts in top-left
 
 	Args :
@@ -33,10 +29,10 @@ def create_initial_grid():
 	grid = {(x, y) : ' + ' for x in range(8) for y in range(8)}
 
 	# Define initial positions 
-	grid[(3,3)] = colors.REDB + "   " + colors.STOP
-	grid[(4,3)] = colors.GREENB + "   " + colors.STOP
-	grid[(3,4)] = colors.GREENB + "   " + colors.STOP
-	grid[(4,4)] = colors.REDB + "   " + colors.STOP
+	grid[(3,3)] = colors.RED + "[I]" + colors.STOP
+	grid[(4,3)] = colors.GREEN + "[A]" + colors.STOP
+	grid[(3,4)] = colors.GREEN + "[A]" + colors.STOP
+	grid[(4,4)] = colors.RED + "[I]" + colors.STOP
 
 	return grid
 
@@ -311,14 +307,14 @@ def playing(player, grid):
 
 	# Determine the current player and define the colors to use to fill the spots of the grid he chose
 	if player == Data.current_player['Activator']:
-		case = colors.GREENB + '   ' + colors.STOP
-		no_case = colors.REDB + '   ' + colors.STOP
+		case = colors.GREEN + '[A]' + colors.STOP
+		no_case = colors.RED + '[I]' + colors.STOP
 		c_player = colors.GREEN + player + colors.STOP
 		print('Joueur actuel : ' + colors.GREEN + player + colors.STOP)
 
 	else:
-		case = colors.REDB + '   ' + colors.STOP
-		no_case = colors.GREENB + '   ' + colors.STOP
+		case = colors.RED + '[I]' + colors.STOP
+		no_case = colors.GREEN + '[A]' + colors.STOP
 		c_player = colors.RED + player + colors.STOP
 		print('Joueur actuel : ' + colors.RED + player + colors.STOP)
 
