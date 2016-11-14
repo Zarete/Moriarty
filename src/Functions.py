@@ -119,42 +119,33 @@ def check_changes(coordXY, case, no_case, grid):
 		return True if the coordinates induce a changement else return False"""
 
 	#TODO : Corriger -> erreur sur le droit de positionner les pions
+	#	récupérer toutes les modifications possibles par le positionnement et les appliquer (pas le cas en ce moment)
+	#	problème -> change état de tous les pions définis alentour et non pas uniquemet les bons. 
 
 	testing_coord, surrounding_coord = generate_allowed_positions(coordXY, grid)
 
-	#print(surrounding_coord)
-	#print(testing_coord)
+	print('SC', surrounding_coord)
+	print('TC', testing_coord)
+	status = False
+	taken_cases = []
 
 	for key, value in testing_coord.items():
 		for cle, valeur in surrounding_coord.items():
-
 			if case in value and no_case in valeur and value != no_case:
 				print('°°', key, '££', cle)
-				grid[key] = case
+				status = True
+				taken_cases.append(cle)
+				"""grid[key] = case
 				grid[cle] = case
-				return grid, True
-	
-	return grid, False
+				return grid, True"""
+	print('taken', taken_cases)
 
+	for elem in taken_cases:
+		for key in grid.keys():
+			grid[elem] = case
 
-"""
-	for i in range(coordXY[0] - 2, coordXY[0] + 3, 4):
-		for j in range(coordXY[1] - 2, coordXY[1] + 3, 2):
-			try:
-				if grid[i,j] == case and grid(i-1, j-1) not in [no_case, '   ']:
-					print('T1')
-					return True
-			except KeyError:
-				pass
-	try:
-		if grid[(coordXY[0], coordXY[1] - 2)] == case or grid[(coordXY[0], coordXY[1] + 2)] == case and grid[(coordXY[0], coordXY[1] - 1)] not in [no_case, '   '] or grid[(coordXY[0], coordXY[1] + 1)] not in [no_case, '   ']:
-			print('T2')
-			return True
+	return grid, status
 
-		else:
-			return False
-	except:
-		pass"""
 
 def generate_allowed_positions(coordXY, grid):
 	"""Allowed positions
