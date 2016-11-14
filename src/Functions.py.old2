@@ -124,23 +124,22 @@ def check_changes(coordXY, case, no_case, grid):
 
 	testing_coord, surrounding_coord = generate_allowed_positions(coordXY, grid)
 
-	print('SC', len(surrounding_coord), surrounding_coord)
-	print('TC', len(testing_coord), testing_coord)
+	#print('SC', surrounding_coord)
+	#print('TC', testing_coord)
 	status = False
 	taken_cases = []
 
 
-	for i in range(len(testing_coord)):
-		#print(testing_coord[i], surrounding_coord[i])
-		try:
-
-			if grid[testing_coord[i]] == case and grid[surrounding_coord[i]] == no_case:
-				print(testing_coord[i], surrounding_coord[i])
-				taken_cases.append(surrounding_coord[i])
+	for key, value in testing_coord.items():
+		for cle, valeur in surrounding_coord.items():
+			if case in value and no_case in valeur:
+				print('++', key, '--', cle)
 				status = True
-
-		except KeyError:
-			pass
+				taken_cases.append(cle)
+				break
+				"""grid[key] = case
+				grid[cle] = case
+				return grid, True"""
 				
 	print('taken', taken_cases)
 
@@ -162,43 +161,52 @@ def generate_allowed_positions(coordXY, grid):
 	Return :
 		testing_coord : coordinates to test
 		surrounging_coord : nearby coordinates of the coordXY spot"""
-	surrounding_coord = []
-	testing_coord = []
-	allowed_position = []
 
-	for i in range(coordXY[0] - 1, coordXY[0] + 2, 2):
+	surrounding_coord = {}
+	testing_coord = {}
+
+	for i in range(coordXY[0] - 1, coordXY[0]+2, 1):
 		for j in range(coordXY[1] - 1, coordXY[1] +2, 1):
-			if (i,j) == coordXY:
+			try:
+				if i < 0 or j < 0:
+					raise ValueError
+
+				surrounding_coord[(i,j)] = grid[(i,j)]
+
+			except ValueError:
 				pass
-			elif i < 0 or j < 0:
-				surrounding_coord.append('None')
-			else:
-				surrounding_coord.append((i,j))
 
 			
 
 	for i in range(coordXY[0] - 2, coordXY[0] + 3, 4):
 		for j in range(coordXY[1] - 2, coordXY[1] + 3, 2):
-			if i < 0 or j < 0 or i > 7 or j > 7:
-				testing_coord.append('None')
-			else:
-				testing_coord.append((i,j))
 
-	TC = [(coordXY[0], coordXY[1] + 2), (coordXY[0], coordXY[1] - 2)]
-	for elem in TC:
+			try:
+				if i < 0 or j < 0 or i > 7 or j > 7:
+					raise ValueError
 
-		if elem[0] not in range(8) or elem[1] not in range(8):
-			testing_coord.append('None')
-		else:
-			testing_coord.append(elem)
+				testing_coord[(i,j)] = grid[(i,j)]
 
+			except ValueError:
+				pass
 
-	SC = [(coordXY[0], coordXY[1] + 1), (coordXY[0], coordXY[1] - 1)]
-	for elem in SC:
-		if elem[0] not in range(8) or elem[1] not in range(8):
-			surrounding_coord.append('None')
-		else:
-			surrounding_coord.append(elem)
+	try:
+		coord_tmp1 = (coordXY[0], coordXY[1] + 2)
+
+		if coord_tmp1[1] not in range(8):
+			raise ValueError
+
+		testing_coord[(coordXY[0], coordXY[1] + 2)] = grid[(coordXY[0], coordXY[1] + 2)] 
+
+		coord_tmp2 = (coordXY[0], coordXY[1] - 2)
+
+		if coord_tmp2[1] not in range(8):
+			raise ValueError
+
+		testing_coord[(coordXY[0], coordXY[1] - 2)] = grid[(coordXY[0], coordXY[1] - 2)]
+
+	except ValueError:
+		pass
 
 	return testing_coord, surrounding_coord
 
