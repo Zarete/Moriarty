@@ -30,7 +30,7 @@ def create_initial_grid():
 		return a list of dictionnaries containing coordinates and status of
 	"""
 
-	grid = {(x,y) : ' + ' for x in range(8) for y in range(8)}
+	grid = {(x, y) : ' + ' for x in range(8) for y in range(8)}
 
 	# Define initial positions 
 	grid[(3,3)] = colors.REDB + "   " + colors.STOP
@@ -106,8 +106,45 @@ def display_grid(grid):
 
 	print(colors.BOLD + ' (Y)\n' + colors.STOP)
 
+def check_end(case, no_case, grid):
+	"""Check end of the game
 
-def check_changes(coordXY, case, no_case, grid):
+	Check if the game is finished. Verify that there are no more possibile moves
+	signing the end of the game
+
+	Args :
+		grid : the actual grid
+		case : the current player cases
+		no_case : the opponent cases
+
+	Return :
+		return True if it is the end of the game, False in another way"""
+
+	#TODO : Récupérer toutes les positions vides -> les tester avec le joueur courant ->si combinaison possible 
+	# False sinon True et continue !
+
+	free_cases = []
+	for key, value in grid.items():
+		if value == ' + ':
+			free_cases.append(key)
+
+	if len(free_cases) == 0:
+		return True
+
+	for elem in free_cases:
+		status, useless2 = check_changes(elem, grid, case, no_case)
+		if status == True:
+			return False
+
+	return True
+
+
+	print(occupied_cases)
+	print(free_cases)
+
+
+
+def check_changes(coordXY, grid, case = None, no_case = None):
 	"""Check changes induced
 
 	Check if the given coordinates induce changement of state
@@ -115,6 +152,9 @@ def check_changes(coordXY, case, no_case, grid):
 
 	Args :
 		coordXY : tuple containing the coordinates (X,Y) chosen by the player
+		grid : current grid
+		case : value of the case of the current player
+		no_case : value of the case of the non playing character
 
 	Return :
 		return True if the coordinates induce a changement else return False"""
@@ -138,12 +178,16 @@ def check_changes(coordXY, case, no_case, grid):
 		except KeyError:
 			pass
 
+	return status, taken_cases
+
+
+def update_grid(grid, taken_cases, case):
+	"""Lol"""
+
 	# Modify the colors of the taken spots
 	for elem in taken_cases:
 		for key in grid.keys():
 			grid[elem] = case
-
-	return grid, status, taken_cases
 
 
 def get_allowed_positions(coordXY, grid):
@@ -212,10 +256,10 @@ def check_position(c_player, case, no_case, grid):
 	Return :
 		coordXY : the coordinates chosen by the player"""
 
-	status = False
+	stat = False
 
 	# Player coordinates choice
-	while not status:
+	while not stat:
 
 		try:
 			print('\n' + c_player, 'a vous de jouer donnez la coordonnée de X : ', end = '')
@@ -232,9 +276,9 @@ def check_position(c_player, case, no_case, grid):
 				print('E2')
 				raise ValueError
 
-			grid, tmp, taken_cases = check_changes((coordX,coordY), case, no_case, grid)
+			stat, taken_cases = check_changes((coordX,coordY), grid, case, no_case)
 			
-			if tmp == False:
+			if stat == False:
 				print('E3')
 				raise ValueError
 
@@ -278,12 +322,18 @@ def playing(player, grid):
 		c_player = colors.RED + player + colors.STOP
 		print('Joueur actuel : ' + colors.RED + player + colors.STOP)
 
-	coordXY, grid, taken_cases = check_position(c_player, case, no_case, grid)
+	end = check_end(case, no_case, grid)
 
-	# Modifies grid with the informations given by the player
-	grid[coordXY] = case
+	if end == False:
+		coordXY, grid, taken_cases = check_position(c_player, case, no_case, grid)
 
-	for elem in taken_cases:
-		grid[elem] = case
+		# Modifies grid with the informations given by the player
+		grid[coordXY] = case
+		update_grid(grid, taken_cases, case)
 
-	return grid
+	return grid, end
+
+if __name__ == "__main__":
+
+	end = check_end()
+	print("ENDING :", end)

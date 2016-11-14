@@ -24,15 +24,19 @@ print('\nFor this game :'
 	
 	'\n 	[+]', Functions.colors.RED + inhibitor + Functions.colors.STOP, 'is the '+Functions.colors.RED+'Inhibitor\n'+Functions.colors.STOP)
 
-while True:
+end = False
 
+while end == False:
 	#os.system('clear')
 
 	Functions.display_grid(grid)
 
-	grid = Functions.playing(player, grid)
+	grid, end = Functions.playing(player, grid)
 
 	if player == activator:
 		player = Data.current_player['Inhibitor']
 	else:
 		player = Data.current_player['Activator']
+
+
+print("OMG THIS IS THE END")
