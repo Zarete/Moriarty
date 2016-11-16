@@ -94,17 +94,17 @@ while True:
 		os.system('clear')
 		print("""
 		d888888b db   db  .d8b.  d8b   db db   dD   db    db  .d88b.  db    db 
-		`~~88~~' 88   88 d8' `8b 888o  88 88 ,8P'   `8b  d8' .8P  Y8. 88    88 
+		   88    88   88 d8' `8b 888o  88 88 ,8P'   `8b  d8' .8P  Y8. 88    88 
 		   88    88ooo88 88ooo88 88V8o 88 88,8P      `8bd8'  88    88 88    88 
-		   88    88~~~88 88~~~88 88 V8o88 88`8b        88    88    88 88    88 
+		   88    88   88 88   88 88 V8o88 88`8b        88    88    88 88    88 
 		   88    88   88 88   88 88  V888 88 `88.      88    `8b  d8' 88b  d88 
-		   YP    YP   YP YP   YP VP   V8P YP   YD      YP     `Y88P'  ~Y8888P' 
+		   YP    YP   YP YP   YP VP   V8P YP   YD      YP     `Y88P'   Y8888P  
 		                                                                       
 		                                                                       
 		d88888b  .d88b.  d8888b. 
 		88'     .8P  Y8. 88  `8D 
 		88ooo   88    88 88oobY' 
-		88~~~   88    88 88`8b   
+		88      88    88 88`8b   
 		88      `8b  d8' 88 `88. 
 		YP       `Y88P'  88   YD 
 		                         
@@ -112,8 +112,8 @@ while True:
 		d8888b. db       .d8b.  db    db d888888b d8b   db  d888b    db 
 		88  `8D 88      d8' `8b `8b  d8'   `88'   888o  88 88' Y8b   88 
 		88oodD' 88      88ooo88  `8bd8'     88    88V8o 88 88        YP 
-		88~~~   88      88~~~88    88       88    88 V8o88 88  ooo      
-		88      88booo. 88   88    88      .88.   88  V888 88. ~8~   db 
+		88      88      88   88    88       88    88 V8o88 88  ooo      
+		88      88booo. 88   88    88      .88.   88  V888 88.  8    db 
 		88      Y88888P YP   YP    YP    Y888888P VP   V8P  Y888P    YP \n\n""")
 		sys.exit()
 
