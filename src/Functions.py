@@ -112,7 +112,7 @@ def get_rules():
 
 		""")
 
-	input("Press any key to return to the menu")
+	input("Press ENTER to return to the menu\n")
 
 def daltonism_mode():
 	pass
@@ -133,6 +133,7 @@ def create_initial_grid():
 	# Define initial positions 
 	grid[(3,3)] = Data.current_mode[1][1]
 	grid[(4,4)] = Data.current_mode[1][1]
+
 	grid[(4,3)] = Data.current_mode[1][0]
 	grid[(3,4)] = Data.current_mode[1][0]
 
@@ -274,23 +275,31 @@ def check_changes(coordXY, grid, case = None, no_case = None):
 	#	récupérer toutes les modifications possibles par le positionnement et les appliquer (pas le cas en ce moment)
 	#	problème -> change état de tous les pions définis alentour et non pas uniquemet les bons. 
 
-	testing_coord, surrounding_coord = get_allowed_positions(coordXY, grid)
+	#TODO : modifier l'orientation des positions -> vérifier présence no_case -> ajouter à tmp les pos jusque case.
+
+	positions = get_allowed_positions(coordXY, grid)
 
 	status = False
-	taken_cases = []
+	taken_cases = []	
 
-	# Check if the position given modifies one spot at list
-	for i in range(len(testing_coord)):
-		try:
-			if grid[testing_coord[i]] == case and grid[surrounding_coord[i]] == no_case:
-				taken_cases.append(surrounding_coord[i])
-				status = True
+	for sublists in positions:
+		tmp = []
+		for elem in sublists:
+			try:
+				if grid[elem] == ' + ':
+					break
+				if grid[elem] == no_case:
+					tmp.append(elem)
+				if grid[elem] == case:
+					taken_cases.extend(tmp)
+					break
+			except:
+				pass
 
-		except KeyError:
-			pass
-
+	if len(taken_cases) > 0:
+		status = True
+		
 	return status, taken_cases
-
 
 def update_grid(grid, taken_cases, case):
 	"""Update the grid
@@ -326,45 +335,54 @@ def get_allowed_positions(coordXY, grid):
 		surrounging_coord : nearby coordinates of the coordXY spot"""
 
 	surrounding_coord = []
-	testing_coord = []
+	final_coord = []
 
-	# Get the coordinates of the external square
-	for i in range(coordXY[0] - 1, coordXY[0] + 2, 2):
-		for j in range(coordXY[1] - 1, coordXY[1] +2, 1):
-			if (i,j) == coordXY:
-				pass
-			elif i < 0 or j < 0:
-				surrounding_coord.append('None')
-			else:
-				surrounding_coord.append((i,j))
-
-	# Get the coordinates of the internal square
-	for i in range(coordXY[0] - 2, coordXY[0] + 3, 4):
-		for j in range(coordXY[1] - 2, coordXY[1] + 3, 2):
-			if i < 0 or j < 0 or i > 7 or j > 7:
-				testing_coord.append('None')
-			else:
-				testing_coord.append((i,j))
-
-	# Get the position of Bottom and Top of the 2 squares
-	TC = [(coordXY[0], coordXY[1] + 2), (coordXY[0], coordXY[1] - 2)]
-	for elem in TC:
-		if elem[0] not in range(8) or elem[1] not in range(8):
-			testing_coord.append('None')
-
-		else:
-			testing_coord.append(elem)
-
-
-	SC = [(coordXY[0], coordXY[1] + 1), (coordXY[0], coordXY[1] - 1)]
-	for elem in SC:
-		if elem[0] not in range(8) or elem[1] not in range(8):
+	for i in range(-7, 8, 1):
+		if (coordXY[0] + i, coordXY[1] + i) == coordXY:
+			pass
+		elif coordXY[0] + i not in range(8) or coordXY[1] + i not in range(8):
 			surrounding_coord.append('None')
-
 		else:
-			surrounding_coord.append(elem)
+			surrounding_coord.append((coordXY[0] + i , coordXY[1] + i))
 
-	return testing_coord, surrounding_coord
+	for i in range(-7, 8, 1):
+		if (coordXY[0] + i, coordXY[1] + i) == coordXY:
+			pass
+		elif coordXY[0] - i < 0 or coordXY[1] + i < 0 or coordXY[0] - i > 7 or coordXY[1] + i > 7:
+			surrounding_coord.append('None')
+		else:
+			surrounding_coord.append((coordXY[0] - i, coordXY[1] + i))
+
+	for i in range(-7, 8, 1):
+		if (coordXY[0], coordXY[1] + i) == coordXY:
+			pass
+		elif coordXY[1] + i > 7 or coordXY[1] + i < 0:
+			surrounding_coord.append('None')
+		else:
+			surrounding_coord.append((coordXY[0], coordXY[1] + i))
+
+	for i in range(-7, 8, 1):
+		if (coordXY[0] + i, coordXY[1]) == coordXY:
+			pass
+		elif coordXY[0] + i > 7 or coordXY[0] + i < 0:
+			surrounding_coord.append('None')
+		else:
+			surrounding_coord.append((coordXY[0] + i, coordXY[1]))
+
+	final_coord.append(surrounding_coord[:7][::-1])
+	final_coord.append(surrounding_coord[7:14])
+	final_coord.append(surrounding_coord[14:21][::-1])
+	final_coord.append(surrounding_coord[21:28])
+	final_coord.append(surrounding_coord[28:35][::-1])
+	final_coord.append(surrounding_coord[35:42])
+	final_coord.append(surrounding_coord[42:49][::-1])
+	final_coord.append(surrounding_coord[49:])
+
+
+	"""for elem in final_coord:
+		print(elem)"""
+
+	return final_coord
 
 def get_position(c_player, case, no_case, grid):
 	"""Get the position entered by the current player
@@ -447,8 +465,8 @@ def playing(player, grid):
 		case = Data.current_mode[1][1]
 		no_case = Data.current_mode[1][0]
 
-	end = check_end(case, no_case, grid)
-
+	#end = check_end(case, no_case, grid)
+	end = False
 	if end == False:
 		coordXY, grid, taken_cases = get_position(player, case, no_case, grid)
 
@@ -457,7 +475,6 @@ def playing(player, grid):
 		update_grid(grid, taken_cases, case)
 
 	return grid, end
-
 
 #################### Artificial Inteligence ####################
 
