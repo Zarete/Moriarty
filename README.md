@@ -1,5 +1,6 @@
                                                     Moriarty 
           
-Programmation project
+Programming Project Moriarty
 
-http://www.network-science.de/ascii/
+
+

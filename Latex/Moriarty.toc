@@ -1,0 +1,18 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Introduction}{1}
+\contentsline {section}{\numberline {2}Les r\IeC {\`e}gles du Jeu}{2}
+\contentsline {subsection}{\numberline {2.1}But du jeu}{2}
+\contentsline {subsection}{\numberline {2.2}Les diff\IeC {\'e}rents mouvements possibles}{2}
+\contentsline {section}{\numberline {3}La Conception du Jeu}{2}
+\contentsline {subsection}{\numberline {3.1}Le plateau de jeu}{4}
+\contentsline {subsection}{\numberline {3.2}Calcul des diff\IeC {\'e}rents mouvements possibles}{4}
+\contentsline {subsection}{\numberline {3.3}L'intelligence artificielle}{4}
+\contentsline {subsection}{\numberline {3.4}Les d\IeC {\'e}tails qui font une diff\IeC {\'e}rence}{5}
+\contentsline {section}{\numberline {4}La R\IeC {\'e}alisation du Jeu}{6}
+\contentsline {subsection}{\numberline {4.1}Le menu }{6}
+\contentsline {subsection}{\numberline {4.2}Le plateau de jeu }{6}
+\contentsline {subsection}{\numberline {4.3}Joueurs et scores}{7}
+\contentsline {subsection}{\numberline {4.4}D\IeC {\'e}termination des mouvements autoris\IeC {\'e}s \& acquisition des pions}{7}
+\contentsline {subsection}{\numberline {4.5}La cr\IeC {\'e}ation de l'IA}{8}
+\contentsline {section}{\numberline {5}Conclusions}{9}
+\contentsline {section}{\numberline {6}Annexes}{10}

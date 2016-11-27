@@ -2,8 +2,6 @@
 
 from . import Functions as Functions
 
-user = [{'pseudo' : 0}]
-
 current_player = {'Activator' : Functions.colors.GREEN+'Activator'+Functions.colors.STOP, 'Inhibitor' : Functions.colors.RED+'Inhibitor'+Functions.colors.STOP}
 
 mode = [['(Daltonien)', [Functions.colors.GREEN+'[A]'+Functions.colors.STOP, Functions.colors.RED+'[I]'+Functions.colors.STOP]],
